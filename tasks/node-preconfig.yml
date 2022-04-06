@@ -1,0 +1,41 @@
+---
+- name: "Node: Get VLAN from requested IP"
+  when: ip is defined
+  block: 
+  # pull-in relavent information about `networks`
+  - include_vars: "networks.yml"
+
+  # determine network `vlan` associated with `ip` if provided 
+  - shell: |
+      bash "{{ playbook_dir }}/files/util-subnet-test.sh" "{{ item.subnet }}" "{{ ip }}"
+    loop: "{{networks}}"
+    ignore_errors: true # ignore errors
+    delegate_to: localhost
+    register: exec_objs # store output from all runs
+
+  # loop through list of networks to find one associated with `ip`
+  - set_fact:
+      found: 1
+      network: ""
+  - set_fact:
+      network: "{{ item.item }}"
+      found: "{{ item.rc }}"
+    loop: "{{ exec_objs.results }}"
+    when: found|int == 1
+  
+  tags:
+  - network-config
+  - pre
+
+# config `name` variable, if not defined
+- when: name is not defined
+  set_fact:
+    name: "{{ inventory_hostname|lower }}"
+  tags: [ pre ]
+  
+# create `node` object, if not defined 
+- when: node is not defined
+  # assume it's attributes are given in `hostvars`
+  set_fact:
+    node: "{{ hostvars[inventory_hostname] }}"
+  tags: [ pre ]
