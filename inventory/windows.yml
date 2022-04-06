@@ -1,0 +1,50 @@
+all:
+  # variables associated with all hosts
+  vars:
+    # ansible connection info used for every host
+    ansible_user: "xmiblackmon@DAVIDSON.EDU" # "xtiinf"
+    ansible_connection: winrm 
+    ansible_transport: kerberos
+    ansible_winrm_server_cert_validation: ignore
+
+  children:
+    # each entry on this level defines a `group` 
+    #  and the name of the group is determined by the associated label
+
+    # Every group consists of a set of hosts which should be 
+    #   considered members (`hosts`), as well as a set of variables (`vars`)
+    #   to associate with members of the group.
+    
+    # the next line begins defining a group named `windows2019`
+    windows2019:
+      # entrys in the `hosts` section define an alias/label which is 
+      #   used to refer the the machine it is meant to represent.
+      hosts:
+        Jas2019Test: 
+          ansible_host: "jas2019test.davidson.edu" # hostname used to connect
+
+        Another2019Test:
+          ansible_host: "another2019test.davidson.edu" 
+          
+
+      # entrys in the `vars` section specify variable names 
+      #  with the value associated with variable determine by   
+      #  the body of the entry  
+      vars:
+        # some examples: 
+        something_interesting: "This is a string variable assoicated the group"
+        not_interesting: 44 # number variable
+        maybe_interesting: true # boolean variable
+
+
+    # begins definition of group named `windows2016`
+    windows2016:
+      hosts:
+        JasW16Test:
+          ansible_host: "jasw16test.davidson.edu"
+
+    # begging of definition for group named `windows10`
+    windows10:
+      hosts:
+        JNSW10:
+          ansible_host: "jnsw10.davidson.edu"
