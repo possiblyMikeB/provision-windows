@@ -1,0 +1,48 @@
+---
+networks:  
+- vlan: "10G Secure 74"
+  subnet: 10.48.74.0/24
+  gateway: 10.48.74.254
+  dns: &regular_dns
+  - 10.48.88.2
+  - 10.48.88.3
+  - 10.48.88.1
+  dhcp: no
+  proxy: {}
+    
+- vlan: "10G Public 88-91"
+  subnet: 10.48.88.0/22
+  gateway: 10.48.91.254
+  dns: *regular_dns
+  dhcp: no
+  proxy: {}
+    
+- vlan: "Frontier 97"
+  subnet: 152.42.97.0/24
+  gateway: 152.42.97.254
+  master: 152.42.97.198
+  dns:
+  - 152.42.97.3 # FreeIPA server
+  dhcp: no
+  proxy:
+    http_proxy: "http://nfs1.ada.davidson.edu:3128"
+    https_proxy: "http://nfs1.ada.davidson.edu:3128"
+
+- vlan: "10G Campus 92-95"
+  subnet: 10.48.92.0/22
+  gateway: 10.48.95.254
+  master: 10.48.95.40
+  dns: *regular_dns
+  dhcp: no
+  proxy: {}
+
+- vlan: "10G Employee"
+  subnet: 10.48.75.0/24
+  gateway: 10.48.75.254
+  dns: *regular_dns
+  dhcp: yes
+  proxy: {}
+  
+
+  
+

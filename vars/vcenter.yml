@@ -1,0 +1,9 @@
+---
+vcenter:
+  host: "vcenter.davidson.edu"
+  username: "{{ vUN }}"
+  password: "{{ vPW }}"
+  cluster: "UCS"
+  datacenter: "Davidson College"
+  datastore: "UCS-Pure01DatastoreCluster"
+
